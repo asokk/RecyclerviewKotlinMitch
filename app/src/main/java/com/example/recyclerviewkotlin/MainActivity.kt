@@ -1,13 +1,15 @@
 package com.example.recyclerviewkotlin
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recyclerviewkotlin.RecyclerViewClickAdapter.OnItemListener
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnItemListener{
 
     private val TAG = MainActivity::class.java.simpleName
     //vars
@@ -47,8 +49,16 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerview.")
         val recyclerView: RecyclerView = findViewById(R.id.recyclerv_view)
-        val adapter = RecyclerViewAdapter(this, mNames, mImageUrls)
+        val adapter = RecyclerViewClickAdapter(this, mNames, mImageUrls,this)
+        //val adapter = RecyclerViewAdapter(this, mNames, mImageUrls,this)
         recyclerView.setAdapter(adapter)
         recyclerView.setLayoutManager(LinearLayoutManager(this))
+    }
+
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, GalleryActivity::class.java)
+        intent.putExtra("image_url", mImageUrls[position])
+        intent.putExtra("image_name", mNames[position])
+        startActivity(intent)
     }
 }
